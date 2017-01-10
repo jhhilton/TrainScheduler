@@ -57,18 +57,6 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>1</td>
-        <td>Anna</td>
-      </tr>
-      <tr>
-        <td>2</td>
-        <td>Debbie</td>
-      </tr>
-      <tr>
-        <td>3</td>
-        <td>John</td>
-      </tr>
     </tbody>
   </table>
 </div>
@@ -79,7 +67,7 @@
 <div id="searchBox">
 <h3 class = "text-center">Add a Train</h3>
 <br>
-  <form>
+  <form id="myForm">
   <div class="form-group">
     <label for="trainName">Train Name</label>
     <input type="text" class="form-control" id="trainName" placeholder="Train Name">
@@ -101,13 +89,44 @@
     <input type="text" class="form-control" id="minsAway" placeholder="Minutes Away">
   </div>
 
-<button class="btn btn-danger" type="submit">Submit</button>
+<button class="btn btn-danger" onClick='addRow(trainName.value,destination.value,freq.value,nextArrival.value,minsAway.value);return false;' type="submit">Submit</button>
 <button class="btn btn-danger" type="reset">Reset</button>
 </div>
 
 </div>
 
 <script src="https://code.jquery.com/jquery-2.2.3.js" integrity="sha256-laXWtGydpwqJ8JA+X9x2miwmaiKhn8tVmOVEigRNtP4=" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+function addRow(train,dest,fre,next,away)
+{
+         if (!document.getElementsByTagName) return;
+         tabBody=document.getElementsByTagName("tbody").item(0);
+         row=document.createElement("tr");
+         cell1 = document.createElement("td");
+         cell2 = document.createElement("td");
+         cell3 = document.createElement("td");
+         cell4 = document.createElement("td");
+         cell5 = document.createElement("td");
+         textnode1=document.createTextNode(train);
+         textnode2=document.createTextNode(dest);
+         textnode3=document.createTextNode(fre);
+         textnode4=document.createTextNode(next);
+         textnode5=document.createTextNode(away);
+         cell1.appendChild(textnode1);
+         cell2.appendChild(textnode2);
+         cell3.appendChild(textnode3);
+         cell4.appendChild(textnode4);
+         cell5.appendChild(textnode5);
+         row.appendChild(cell1);
+         row.appendChild(cell2);
+         row.appendChild(cell3);
+         row.appendChild(cell4);
+         row.appendChild(cell5);
+         tabBody.appendChild(row);
+}
+
+</script>
 
 </body>
 </html>
