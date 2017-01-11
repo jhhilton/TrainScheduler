@@ -56,7 +56,7 @@
         <th>Minutes Away</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="table_body">
     </tbody>
   </table>
 </div>
@@ -89,7 +89,7 @@
     <input type="text" class="form-control" id="minsAway" placeholder="Minutes Away">
   </div>
 
-<button id= "submitButton" class="btn btn-danger" onClick='addRow(trainName.value,destination.value,freq.value,nextArrival.value,minsAway.value);return false;' type="submit">Submit</button>
+<button id= "submitButton" class="btn btn-danger" type="submit">Submit</button>
 <button class="btn btn-danger" type="reset">Reset</button>
 </div>
 
@@ -99,32 +99,32 @@
 
 <script type="text/javascript">
 function addRow(train,dest,fre,next,away)
-{
-         if (!document.getElementsByTagName) return;
-         tabBody=document.getElementsByTagName("tbody").item(0);
-         row=document.createElement("tr");
-         cell1 = document.createElement("td");
-         cell2 = document.createElement("td");
-         cell3 = document.createElement("td");
-         cell4 = document.createElement("td");
-         cell5 = document.createElement("td");
-         textnode1=document.createTextNode(train);
-         textnode2=document.createTextNode(dest);
-         textnode3=document.createTextNode(fre);
-         textnode4=document.createTextNode(next);
-         textnode5=document.createTextNode(away);
-         cell1.appendChild(textnode1);
-         cell2.appendChild(textnode2);
-         cell3.appendChild(textnode3);
-         cell4.appendChild(textnode4);
-         cell5.appendChild(textnode5);
-         row.appendChild(cell1);
-         row.appendChild(cell2);
-         row.appendChild(cell3);
-         row.appendChild(cell4);
-         row.appendChild(cell5);
-         tabBody.appendChild(row);
-}
+// {
+//          if (!document.getElementsByTagName) return;
+//          tabBody=document.getElementsByTagName("tbody").item(0);
+//          row=document.createElement("tr");
+//          cell1 = document.createElement("td");
+//          cell2 = document.createElement("td");
+//          cell3 = document.createElement("td");
+//          cell4 = document.createElement("td");
+//          cell5 = document.createElement("td");
+//          textnode1=document.createTextNode(train);
+//          textnode2=document.createTextNode(dest);
+//          textnode3=document.createTextNode(fre);
+//          textnode4=document.createTextNode(next);
+//          textnode5=document.createTextNode(away);
+//          cell1.appendChild(textnode1);
+//          cell2.appendChild(textnode2);
+//          cell3.appendChild(textnode3);
+//          cell4.appendChild(textnode4);
+//          cell5.appendChild(textnode5);
+//          row.appendChild(cell1);
+//          row.appendChild(cell2);
+//          row.appendChild(cell3);
+//          row.appendChild(cell4);
+//          row.appendChild(cell5);
+//          tabBody.appendChild(row);
+// }
 
 </script>
 
@@ -140,7 +140,7 @@ function addRow(train,dest,fre,next,away)
   };
   firebase.initializeApp(config);
 
-  var database = firebase.database().ref();
+  var database = firebase.database().ref().child("trainlist");
 
 
       $("#submitButton").on("click", function() {
@@ -154,7 +154,26 @@ function addRow(train,dest,fre,next,away)
         arrivalData: nextArrival.value,
         minsData: minsAway.value
       });
+      // myForm.reset();
     });
+
+$(document).ready(function(){
+
+var rootRef = firebase.database().ref().child("trainlist");
+
+rootRef.on("child_added", snap => {
+
+var train = snap.child("trainData").val();
+var destination = snap.child("destData").val();
+var frequency = snap.child("freqData").val();
+var arrival = snap.child("arrivalData").val();
+var minutes = snap.child("minsData").val();
+
+$("#table_body").append("<tr><td>" + train + "</td><td>" + destination + "</td><td>" + frequency + "</td><td>" + arrival + "</td><td>" + minutes + "</td></tr>");
+
+})
+
+});
 
 </script>
 
