@@ -89,7 +89,7 @@
     <input type="text" class="form-control" id="minsAway" placeholder="Minutes Away">
   </div>
 
-<button class="btn btn-danger" onClick='addRow(trainName.value,destination.value,freq.value,nextArrival.value,minsAway.value);return false;' type="submit">Submit</button>
+<button id= "submitButton" class="btn btn-danger" onClick='addRow(trainName.value,destination.value,freq.value,nextArrival.value,minsAway.value);return false;' type="submit">Submit</button>
 <button class="btn btn-danger" type="reset">Reset</button>
 </div>
 
@@ -125,6 +125,36 @@ function addRow(train,dest,fre,next,away)
          row.appendChild(cell5);
          tabBody.appendChild(row);
 }
+
+</script>
+
+<script src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyAQH0nCtILhOuJIRv1uF11osPjCeRh4NsA",
+    authDomain: "jacksproject-ba49e.firebaseapp.com",
+    databaseURL: "https://jacksproject-ba49e.firebaseio.com",
+    storageBucket: "jacksproject-ba49e.appspot.com",
+    messagingSenderId: "687175025523"
+  };
+  firebase.initializeApp(config);
+
+  var database = firebase.database().ref();
+
+
+      $("#submitButton").on("click", function() {
+
+      //  Store Click Data to Firebase in a JSON property called clickCount
+      // Note how we are using the Firebase .set() method
+      database.push().set({
+        trainData: trainName.value,
+        destData: destination.value,
+        freqData: freq.value,
+        arrivalData: nextArrival.value,
+        minsData: minsAway.value
+      });
+    });
 
 </script>
 
