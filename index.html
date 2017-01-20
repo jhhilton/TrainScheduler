@@ -90,13 +90,14 @@
     <input type="text" class="form-control" id="minsAway" placeholder="Minutes Away">
   </div>
 
-<button id= "submitButton" class="btn btn-danger" type="submit">Submit</button>
+<button id= "submitButton" class="btn btn-danger" onsubmit="return a(nextArrival)" type="submit">Submit</button>
 <button class="btn btn-danger" type="reset">Reset</button>
 </div>
 
 </div>
 
 <script src="https://code.jquery.com/jquery-2.2.3.js" integrity="sha256-laXWtGydpwqJ8JA+X9x2miwmaiKhn8tVmOVEigRNtP4=" crossorigin="anonymous"></script>
+<script src="http://momentjs.com/downloads/moment.js"></script>
 
 <script src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"></script>
 <script>
@@ -124,6 +125,7 @@
         arrivalData: nextArrival.value,
         minsData: minsAway.value
       });
+
     });
 
 $(document).ready(function(){
@@ -141,9 +143,47 @@ var remove = '<span id="removeEntry" class="glyphicon glyphicon-trash"></span>'
 
 $("#table_body").append("<tr><td>" + train + "</td><td>" + destination + "</td><td>" + frequency + "</td><td>" + arrival + "</td><td>" + minutes + "</td><td>" + remove + "</td></tr>");
 
+}) 
+
+});
+
+$("#removeEntry").click(function(){
+
+var databaseRef = firebase.database().ref().child("trainlist");
+
+databaseRef.on("child_removed", snap => {
+
+const liToRemove = document.getElementById(snap.key);
+liToRemove.remove();
+
 })
 
 });
+
+(function() {
+  var start = new Date;
+  start.setHours(23, 0, 0); // 11pm
+
+  function pad(num) {
+    return ("0" + parseInt(num)).substr(-2);
+  }
+
+  function tick() {
+    var now = new Date;
+    if (now > start) { // too late, go to tomorrow
+      start.setDate(start.getDate() + 1);
+    }
+    var remain = ((start - now) / 1000);
+    var hh = pad((remain / 60 / 60) % 60);
+    var mm = pad((remain / 60) % 60);
+    var ss = pad(remain % 60);
+    document.getElementById('time').innerHTML =
+      hh + ":" + mm + ":" + ss;
+    setTimeout(tick, 1000);
+  }
+
+  document.addEventListener('DOMContentLoaded', tick);
+})();
 
 </script>
 
